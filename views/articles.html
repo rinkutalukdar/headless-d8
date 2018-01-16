@@ -4,20 +4,13 @@
         <title>Integrating AngularJS with NodeJS</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-        <!-- jQuery library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
-        <script src="javascripts/app.js" type="text/javascript"></script> <!-- not created yet -->
+        <script src="lib/bootstrap.min.js"></script>
         <link href="css/styles.css" rel="stylesheet" />
     </head>
     <body >
-        <div ng-controller="myController">
+        <div ng-controller="articleController">
 
           <nav  class="navbar navbar-default">
             <div class="header container">
@@ -34,22 +27,26 @@
           </nav>
 
           <div class="container">
-            <div ng-repeat="item in articles">
-              <h2>{{ item.attributes.title }}</h2>
-              <p>
-              <div><img src="{{ item.relationships.field_image.links.self.data.links.self }}" /></div>
-              {{ item.attributes.body.value | limitTo: 300 }}
-              </p>
+            <div ng-controller="articleController as data">
+              <div ng-show="data.articles.length <= 0">
+                <span style="text-align:center;">Loading new data!!</span>
+              </div>
+              <div dir-paginate="item in data.articles|itemsPerPage:data.itemsPerPage" total-items="data.total_count" class="article-item">
+                <h2>{{ item.title[0].value }}</h2>
+                <p>
+                <i>{{ item.nid[0].value }}</i>
+                <img src="{{ item.field_image[0].url }}"/>
+                {{ item.body[0].value | limitTo: 300}}
+                </p>
+              </div>
+              <dir-pagination-controls
+                max-size="5"
+                direction-links="true"
+                boundary-links="true"
+                on-page-change="data.getData(newPageNumber)" >
+              </dir-pagination-controls>
             </div>
-
-            <pagination
-              ng-model="currentPage"
-              total-items="todos.length"
-              max-size="maxSize"
-              boundary-links="true">
-            </pagination>
           </div>
-
           <!--Footer-->
           <footer class="page-footer">
               <!--Copyright-->
@@ -61,5 +58,9 @@
               <!--/Copyright-->
           </footer>
           <!--/Footer-->
+
+          <script src="lib/angular.js"></script>
+          <script src="javascripts/app.js" type="text/javascript"></script>
+          <script src="javascripts/dirPagination.js" type="text/javascript"></script>
     </body>
 </html>

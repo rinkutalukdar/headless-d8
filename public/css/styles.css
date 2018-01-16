@@ -2,3 +2,12 @@ footer{
   background: #ddd;
   padding: 20px 0;
 }
+.article-item{
+  height: 100px;
+}
+.article-item img{
+  height: 70px;
+  width: 70px;
+  float: left;
+  margin-right: 10px;
+}
